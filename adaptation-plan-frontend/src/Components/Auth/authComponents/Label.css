@@ -1,0 +1,10 @@
+/*класс с надписью про Росатом*/
+.center{
+    margin-left: 80px;
+    margin-top: 60px;
+    font-size: 29px;
+    text-align: left;
+    font-weight: 300;
+    width: 552px;
+    height: 207px;
+}

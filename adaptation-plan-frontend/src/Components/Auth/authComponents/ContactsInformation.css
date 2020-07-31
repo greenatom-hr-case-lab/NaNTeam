@@ -1,0 +1,42 @@
+@font-face {
+    font-family: Sansation;
+    src: url(../../Account/Fonts/sansation.light.ttf);
+}
+
+.footer{     /*надпись с телефоном и с почтой*/
+    position: absolute;
+    bottom: 40px;
+    left: 45%;
+    font-size: 24px;
+}
+
+.mailTitle{
+    display: flex;
+    align-items: center;
+}
+
+.passwordTitle{
+    display: flex;
+    align-items: center;
+}
+
+.mail{
+    height: 24px;
+    width: 24px;
+    margin-right: 10px;
+    background: url("./mail_2.png");
+    border: none;
+}
+
+.phone{
+    height: 24px;
+    width: 24px;
+    margin-right: 10px;
+    background: url("./phone_1.png");
+    border: none;
+}
+
+.sansation{
+    font-family: Sansation, sans-serif;
+    font-size: 24px;
+}

@@ -1,0 +1,67 @@
+.task{
+    width: 440px;
+    height: 340px;
+    border: 1px solid black;
+    border-radius: 20px;
+    box-sizing: border-box;
+    margin-top: 10px;
+}
+
+.taskTitle{
+    display: flex;
+    height: 24px;
+    align-items: center;
+    font-size: 18px;
+    margin: 16px 0;
+}
+
+.checkBox{
+    margin-left: 20px;
+}
+
+.taskSubTitle{
+    border-radius: 15px;
+    border: 1px solid silver;
+    /*width: 220px;
+    height: 38px;*/
+    width: 265px;
+    margin-left: 52px;
+    height: 32px;
+    padding-left: 15px;
+    box-sizing: border-box;
+}
+
+.taskSubTitle:focus{
+    outline: none;
+}
+
+.deleteTask{
+    height: 24px;
+    width: 24px;
+    border:none;
+    margin-left: 45px;
+    margin-right: 18px;
+    background: url("../../AccountAssets/deleteTask.png") no-repeat;
+}
+
+.taskPeriod{
+    display: flex;
+    justify-content: center;
+}
+
+.taskText{
+    display: block;
+    width: 400px;
+    height: 140px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    resize: none;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+.taskDate{
+    line-height: 20px;
+    margin-top: 20px;
+    margin-left: 200px;
+}

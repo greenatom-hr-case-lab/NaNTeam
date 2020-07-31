@@ -1,0 +1,34 @@
+.header{
+    display: flex;
+    justify-content: space-between;
+    padding-top: 10px;
+}
+
+.headerLeft{
+    display: flex;
+    width: 660px;
+    justify-content: space-between;
+}
+
+.logo{
+    width: 44px;
+    height: 41px;
+    background: url('../AccountAssets/logo.png');
+    margin-left: 66px;
+}
+
+.title{
+    display: flex;
+    align-items: center;
+    width: 240px;
+    justify-content: space-between;
+}
+
+.headerRight{
+    margin-right: 168px;
+    width: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+

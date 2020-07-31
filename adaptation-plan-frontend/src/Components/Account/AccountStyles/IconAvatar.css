@@ -1,0 +1,6 @@
+.iconAvatar{
+    height: 32px;
+    width: 32px;
+    border: none;
+    background: url('../AccountAssets/user.png');
+}

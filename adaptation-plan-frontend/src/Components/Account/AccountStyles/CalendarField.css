@@ -1,0 +1,23 @@
+.date{
+    border-radius: 15px;
+    border: 1px solid silver;
+    /*width: 220px;
+    height: 38px;*/
+    width: 200px;
+    height: 32px;
+    box-sizing: border-box;
+    padding-left: 15px;
+}
+
+.calendar{
+    position: absolute;
+    margin-top: 310px;
+    margin-left: 194px;
+    border-radius: 15px;
+    z-index: 1;
+}
+
+.date:focus{
+    outline: none;
+}
+

@@ -1,0 +1,40 @@
+.profile{
+    display: flex;
+    margin-top: 65px;
+}
+
+.avatarCard{
+    margin-left: 420px;
+}
+
+.avatar{
+    background: url("../../AccountAssets/avatar.png");
+    height: 256px;
+    width: 256px;
+}
+
+.caption{
+    margin: 10px 0;
+    font-size: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.container{
+    margin-left: 100px;
+}
+
+.titles{
+    display: flex;
+    width: 250px;
+    justify-content: space-between;
+    margin-bottom: 70px;
+}
+
+.content{
+  margin-top: 20px;
+}
+
+.titleName{
+    margin-bottom: 4px;
+}

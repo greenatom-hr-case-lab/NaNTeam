@@ -1,0 +1,42 @@
+.plan{
+    display: flex;
+    margin-top: 20px;
+}
+
+.tasks{
+    margin-left: 420px;
+}
+
+.tasksEmployee{
+    margin-left: 420px;
+}
+
+.addTaskEmployee{
+    margin-top: 10px;
+    margin-left: 393px;
+}
+
+.select{
+    display: flex;
+}
+
+.board{
+    display: flex;
+    justify-content: center;
+    margin-top: 150px;
+}
+
+.structurePlan{
+    margin-left: 130px;
+}
+
+.block{
+    display: flex;
+    align-items: center;
+}
+
+.action{
+    position: absolute;
+    left: 610px;
+    top: 300px;
+}

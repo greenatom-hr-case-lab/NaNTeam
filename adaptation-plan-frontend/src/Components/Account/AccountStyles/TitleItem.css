@@ -1,0 +1,44 @@
+.titleItem{
+    font-size: 18px;
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+    font-family: Sansation, sans-serif;
+}
+
+@font-face {
+    font-family: Sansation;
+    src: url(../Fonts/sansation.light.ttf);
+}
+/*.titleItem:hover{
+    font-weight: bold;
+}*/
+
+.titleItem:after {
+    display: block;
+    width: 0;/*задаём длину линии до наведения курсора*/
+    height: 2px; /*задаём ширину линии*/
+    background-color: #bed52d; /*задаём цвет линии*/
+    content: "";
+    transition: width 0.3s ease-out; /*задаём время анимации*/
+}
+
+.titleItem:hover:after {
+    width: 100%; /*устанавливаем значение 100% чтобы ссылка подчёркивалась полностью*/
+}
+
+.titleItem:focus:after {
+    width: 0;
+    transition: width 0s ease-out;
+}
+
+.line{
+    width: 100%;/*задаём длинну линии до наведения курсора*/
+    height: 2px; /*задаём ширину линии*/
+    background-color: #bed52d; /*задаём цвет линии*/
+    content: "";
+}
+
+/*
+.titleItem:hover .line{
+    width: 0;
+}*/

@@ -1,0 +1,18 @@
+.textField{
+    border-radius: 15px;
+    border: 1px solid silver;
+    /*width: 220px;
+    height: 38px;*/
+    width: 200px;
+    height: 32px;
+    padding-left: 15px;
+    box-sizing: border-box;
+}
+
+.textField:focus{
+    outline: none;
+}
+
+.item > span {
+    font-size: 18px;
+}

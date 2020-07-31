@@ -1,0 +1,7 @@
+.signOut{
+    background: url("../../AccountAssets/signOut.png");
+    height: 24px;
+    width: 24px;
+    border: none;
+    text-decoration: none;
+}

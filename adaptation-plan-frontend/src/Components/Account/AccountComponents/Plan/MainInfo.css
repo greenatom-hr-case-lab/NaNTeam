@@ -1,0 +1,40 @@
+.mainInfo{
+    width: 380px;
+    height: 485px;
+    margin-top: 10px;
+}
+
+.mainInfo > p{
+    width: max-content;
+    margin: 0 auto;
+    font-size: 19px;
+    margin-bottom: 30px;
+}
+
+.buttonsList{
+    display: flex;
+    margin-top: 40px;
+    justify-content: center;
+}
+
+.item{
+    display: flex;
+    width: 380px !important;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.nextStage{
+    height: 40px;
+    width: 200px;
+    margin: 10px 90px;
+    background-color: #BED52D;
+    border: 1px solid silver;
+    font-size: 18px;
+    border-radius: 15px;
+}
+
+.nextStage:focus{
+    outline: none;
+}

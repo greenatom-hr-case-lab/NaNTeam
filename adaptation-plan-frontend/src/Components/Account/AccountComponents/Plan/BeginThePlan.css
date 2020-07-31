@@ -1,0 +1,27 @@
+.newPlan{
+    width: max-content;
+    position: absolute;
+}
+
+.offer{
+    height: 32px;
+    font-size: 26px;
+    line-height: 30px
+}
+
+.createPlan {
+    display: block;
+    width: 173px;
+    height: 58px;
+    font-size: 18px;
+    background: #BED52D;
+    border: 2px solid #999494;
+    box-sizing: border-box;
+    border-radius: 15px;
+    margin: 0 auto;
+}
+
+.createPlan:focus{
+    outline: none;
+}
+
