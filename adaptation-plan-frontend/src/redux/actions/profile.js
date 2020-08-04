@@ -26,19 +26,18 @@ const fetchProfileFailure = error => {
 
 //action creator where we got data from server
 export function profileFetchData(object) {
-  console.log('object.token', object.token)
   return (dispatch) => {
+    dispatch(fetchProfile())
     axios
       .post("/profile",{},{
         headers: {
           authorization: object.token
     }})
       .then(response => {
-        console.log(response.data)
         dispatch(fetchProfileSuccess(response.data))
       })
       .catch(error => {
-        console.log('error:', error)
+        dispatch(fetchProfileFailure(error))
       });
   }
 }

@@ -32,7 +32,6 @@ export function authFetchData(object) {
     dispatch(fetchAuth())
     axios.post("/signin", object)
       .then(response => {
-        console.log('response.data', response.data)
         localStorage.setItem('token', response.data.token)
         dispatch(fetchAuthSuccess(response.data))
       })

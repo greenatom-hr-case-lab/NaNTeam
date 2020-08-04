@@ -1,12 +1,27 @@
 import axios from "axios";
 import {
-  FETCH_UPDATE_PLAN
+  FETCH_UPDATE_PLAN_REQUEST,
+  FETCH_UPDATE_PLAN_SUCCESS,
+  FETCH_UPDATE_PLAN_FAILURE
 } from "./types"
 
 
-const fetchUpdatePlan = plan => {
+const fetchUpdatePlan = () => {
   return {
-    type: FETCH_UPDATE_PLAN,
+    type: FETCH_UPDATE_PLAN_REQUEST
+  }
+}
+
+const fetchUpdatePlanFailure = error => {
+  return {
+    type: FETCH_UPDATE_PLAN_FAILURE,
+    payload: error
+  }
+}
+
+const fetchUpdatePlanSuccess = plan => {
+  return {
+    type: FETCH_UPDATE_PLAN_SUCCESS,
     payload: plan
   }
 }
@@ -15,6 +30,7 @@ const fetchUpdatePlan = plan => {
 export function updatePlan(object, token) {
   console.log("updatePlan")
   return (dispatch) => {
+    dispatch(fetchUpdatePlan)
     axios
       .post("/plan/updatePlan", object ,{
         headers: {
@@ -22,10 +38,10 @@ export function updatePlan(object, token) {
     }})
       .then(response => {
         console.log(response.data)
-        dispatch(fetchUpdatePlan(response.data))
+        dispatch(fetchUpdatePlanSuccess(response.data))
       })
       .catch(error => {
-        console.log(error)
+        dispatch(fetchUpdatePlanFailure(error))
       });
   }
 }
@@ -33,6 +49,7 @@ export function updatePlan(object, token) {
 export function updateStage(object, token) {
   console.log("updateStage")
   return (dispatch) => {
+    dispatch(fetchUpdatePlan)
     axios
       .post("/plan/updateStage", object ,{
         headers: {
@@ -40,10 +57,10 @@ export function updateStage(object, token) {
     }})
       .then(response => {
         console.log(response.data)
-        dispatch(fetchUpdatePlan(response.data))
+        dispatch(fetchUpdatePlanSuccess(response.data))
       })
       .catch(error => {
-        console.log(error)
+        dispatch(fetchUpdatePlanFailure(error))
       });
   }
 }
@@ -51,6 +68,7 @@ export function updateStage(object, token) {
 export function addNewTask(object, token) {
   console.log("addNewTask")
   return (dispatch) => {
+    dispatch(fetchUpdatePlan)
     axios
       .post("/plan/addTask",  object ,{
         headers: {
@@ -58,10 +76,10 @@ export function addNewTask(object, token) {
     }})
       .then(response => {
         console.log(response.data)
-        dispatch(fetchUpdatePlan(response.data))
+        dispatch(fetchUpdatePlanSuccess(response.data))
       })
       .catch(error => {
-        console.log(error)
+        dispatch(fetchUpdatePlanFailure(error))
       });
   }
 }
@@ -69,6 +87,7 @@ export function addNewTask(object, token) {
 export function deleteTask(object, token) {
   console.log("deleteTask")
   return (dispatch) => {
+    dispatch(fetchUpdatePlan)
     axios
       .post("/plan/deleteTask",  object ,{
         headers: {
@@ -76,10 +95,10 @@ export function deleteTask(object, token) {
     }})
       .then(response => {
         console.log(response.data)
-        dispatch(fetchUpdatePlan(response.data))
+        dispatch(fetchUpdatePlanSuccess(response.data))
       })
       .catch(error => {
-        console.log(error)
+        dispatch(fetchUpdatePlanFailure(error))
       });
   }
 }
@@ -87,6 +106,7 @@ export function deleteTask(object, token) {
 export function getPlanCurrentEmployee(object, token) {
   console.log("getPlanCurrentEmployee")
   return (dispatch) => {
+    dispatch(fetchUpdatePlan)
     axios
       .post("/plan/currentEmployee",  object , {
         headers: {
@@ -94,10 +114,10 @@ export function getPlanCurrentEmployee(object, token) {
     }})
       .then(response => {
         console.log(response.data)
-        dispatch(fetchUpdatePlan(response.data))
+        dispatch(fetchUpdatePlanSuccess(response.data))
       })
       .catch(error => {
-        console.log(error)
+        dispatch(fetchUpdatePlanFailure(error))
       });
   }
 }
@@ -105,6 +125,7 @@ export function getPlanCurrentEmployee(object, token) {
 export function updatePlanTask(object, token) {
   console.log("updatePlanTask")
   return (dispatch) => {
+    dispatch(fetchUpdatePlan)
     axios
       .post("/plan/updateTask", object ,{
         headers: {
@@ -112,10 +133,10 @@ export function updatePlanTask(object, token) {
         }})
       .then(response => {
         console.log(response.data)
-        dispatch(fetchUpdatePlan(response.data))
+        dispatch(fetchUpdatePlanSuccess(response.data))
       })
       .catch(error => {
-        console.log(error)
+        dispatch(fetchUpdatePlanFailure(error))
       });
   }
 }
@@ -123,17 +144,17 @@ export function updatePlanTask(object, token) {
 export function getPlan(token) {
   console.log("getPlan")
   return (dispatch) => {
+    dispatch(fetchUpdatePlan)
     axios
       .post("/plan", {} ,{
         headers: {
           authorization: token
     }})
-      .then(response => {
-        console.log(response.data)
-        dispatch(fetchUpdatePlan(response.data))
-      })
-      .catch(error => {
-        console.log(error)
-      });
+      .then(response =>
+        dispatch(fetchUpdatePlanSuccess(response.data))
+      )
+      .catch(
+        error => dispatch(fetchUpdatePlanFailure(error))
+      );
   }
 }

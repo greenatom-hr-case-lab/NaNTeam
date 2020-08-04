@@ -1,7 +1,9 @@
 import {
-  DELETE_AUTH_TOKEN,
-  FETCH_PLAN_DIRECTORS,
-  FETCH_PLAN_EMPLOYEES
+  FETCH_EMPLOYEES,
+  FETCH_EMPLOYEES_SUCCESS,
+  FETCH_EMPLOYEES_FAILURE,
+  FETCH_DIRECTORS_SUCCESS,
+  FETCH_DIRECTORS_FAILURE
 } from '../actions/types'
 
 const initialState = {
@@ -12,24 +14,37 @@ const initialState = {
 }
 
 export const employeesPlanReducer = (state = initialState, action) => {
+  console.log('employeesPlanReducer', state)
   switch (action.type) {
-    case FETCH_PLAN_DIRECTORS:
-      console.log('directors', action.payload)
+    case FETCH_EMPLOYEES:
+      console.log('FETCH_EMPLOYEES')
       return {
         ...state,
-        directors: action.payload
+        loading: true
       }
-    case FETCH_PLAN_EMPLOYEES:
+    case FETCH_EMPLOYEES_SUCCESS:
+      console.log('FETCH_EMPLOYEES_SUCCESS')
       return {
         ...state,
         employees: action.payload
       }
-    case DELETE_AUTH_TOKEN:
+    case FETCH_EMPLOYEES_FAILURE:
+      console.log('FETCH_EMPLOYEES_FAILURE')
       return {
-        loading: false,
-        employees: '',
-        error: '',
-        directors: ''
+        ...state,
+        error: action.payload
+      }
+    case FETCH_DIRECTORS_SUCCESS:
+      console.log('FETCH_DIRECTORS_SUCCESS')
+      return {
+        ...state,
+        directors: action.payload
+      }
+    case FETCH_DIRECTORS_FAILURE:
+      console.log('FETCH_DIRECTORS_FAILURE')
+      return {
+        ...state,
+        error: action.payload
       }
     default:
       return state

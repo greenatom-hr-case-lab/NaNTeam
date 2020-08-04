@@ -14,7 +14,6 @@ import TitleItem from "../TitleItem";
 function Profile(props) {
   const [token, setToken] = useState(localStorage.getItem('token'))
   useEffect(() => {
-    console.log('useEffect token', props.token)
     props.fetchData({token: token})
   }, [])
   
@@ -33,9 +32,6 @@ function Profile(props) {
     )
   }
   if (token) {
-    if (props.loading)
-      return <Loader/>
-    else
       return (
         <div className="profile">
           <div className="avatarCard">
@@ -69,7 +65,6 @@ function Profile(props) {
 }
 
 const mapStateToProps = state => {
-  console.log('profile', state.profileReducer.profile)
   return {
     token: state.authReducer.token,
     loading: state.profileReducer.loading,

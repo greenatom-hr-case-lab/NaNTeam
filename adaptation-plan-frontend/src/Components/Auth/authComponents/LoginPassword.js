@@ -6,13 +6,11 @@ import Loader from '../../Account/AccountComponents/Loader'
 import './LoginPassword.css'
 
 function Inputs(props) {
-    const [click, setClick] = useState(false)
     const [login, setLogin] = useState('')
     const [password, setPassword] = useState('')
     
     function sendData(e) {
         e.preventDefault()
-        console.log({login: login, password: password})
         props.fetchData({login: login, password: password})
     }
     
@@ -42,7 +40,6 @@ function Inputs(props) {
 }
 
 const mapStateToProps = state => {
-    console.log('token:', state.authReducer)
     return {
         loading: state.authReducer.loading,
         token: state.authReducer.token,
@@ -50,7 +47,7 @@ const mapStateToProps = state => {
     }
 }
 
-const mapDispatchToProps = (disptach, object) => {
+const mapDispatchToProps = (disptach) => {
     return {
         fetchData: (object) => disptach(authFetchData(object))
     }

@@ -7,18 +7,16 @@ const initialState = {
 }
 
 export const profileReducer = (state = initialState, action) => {
-  console.log('action.payload', action.payload)
+  console.log('profileReducer', state)
   switch(action.type) {
     case FETCH_PROFILE_REQUEST:
       console.log("FETCH_PROFILE_REQUEST")
-      console.log(state)
       return {
         ...state,
         loading: true,
       }
     case FETCH_PROFILE_SUCCESS:
       console.log("FETCH_PROFILE_SUCCESS")
-      console.log(state)
       return {
         ...state,
         loading: false,
