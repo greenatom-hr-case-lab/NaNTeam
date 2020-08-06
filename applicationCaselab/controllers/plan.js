@@ -79,17 +79,19 @@ export async function updatePlan( req,res,next) {
     console.log(req.body)
     const plan = await Plan.findOneAndUpdate({fioEmployee: req.body.fioEmployee}, req.body,{new: true})
     if (!plan){
-      console.log('true')
-        var newPlan = new Plan(req.body);
-        await newPlan.save();
-        console.log(newPlan)
-        return res.json(newPlan);
-    } else{
-      console.log('else');
+      console.log('updatePlan true')
+      var newPlan = new Plan(req.body);
+      await newPlan.save();
+      const plan = await Plan.findOne({fioEmployee: req.body.fioEmployee})
+      plan.directorEmployee = await User.findOne({_id: plan.directorEmployee}, {name: 1})
+      plan.hrEmployee = await User.findOne({_id: plan.hrEmployee}, {name: 1})
+      console.log(plan)
+      return res.json(plan);
+    } else {
+      console.log('updatePlan else');
       plan.directorEmployee = await User.findOne({_id: plan.directorEmployee}, {name: 1})
       plan.hrEmployee = await User.findOne({_id: plan.hrEmployee}, {name: 1})
       console.log('plan', plan)
-/*      const plan = await User.find().where("_id", plan._id)*/
       return res.json(plan)
     }
 }

@@ -28,6 +28,7 @@ function Plan(props) {
   }
   
   useEffect(() => {
+    console.log('PROPS.PLAN-----------------', props.plan)
     if (props.plan){
       setStage(props.plan.stage)
     }
@@ -70,7 +71,8 @@ function Plan(props) {
                 return <Task task={task} key={index} index={index}/>
               }) : null) : ''}
             </div>
-            {(stage === 'Начало' || props.plan && fioEmployee) ? (<div className="structurePlan"><MainInfo fioEmployee={fioEmployee}/></div>) : ''}
+            {stage === 'Начало' && !props.plan && <div className="structurePlan"><MainInfo fioEmployee={fioEmployee}/></div>}
+            {props.plan && fioEmployee && <div className="structurePlan"><MainInfo fioEmployee={fioEmployee}/></div>}
           </div>
         )
       }

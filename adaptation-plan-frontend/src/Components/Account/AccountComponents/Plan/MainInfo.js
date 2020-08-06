@@ -84,29 +84,46 @@ function MainInfo(props) {
   
   const updatePlan = () => {
     if (
-      ((props.plan ? props.plan.stage : !props.plan) || props.plan.stage  && mark) &&
+      ((!props.plan) || props.plan.stage  && mark) &&
       position &&
       directorEmployee &&
       adaptationPeriodStart &&
       adaptationPeriodEnd &&
       hrEmployee
-    ) { alert('зашел в if')
-      props.updateAdaptationPlan(
-      {
-        token: token,
-        plan: {
-          fioEmployee: props.fioEmployee.id,
-          position: position,
-          directorEmployee: directorEmployee.id,
-          adaptationPeriodStart: adaptationPeriodStart,
-          adaptationPeriodEnd: adaptationPeriodEnd,
-          hrEmployee: props.profile._id,
-          stage: props.plan? props.plan.stage : stage[0].name,
-          mark: mark,
-          dateCreate: props.plan? props.plan.dateCreate : date.toLocaleDateString
-        }
+    ) { alert('updatePlan')
+      if (!props.plan) {
+        props.updateAdaptationPlan(
+          {
+            token: token,
+            plan: {
+              fioEmployee: props.fioEmployee.id,
+              position: position,
+              directorEmployee: directorEmployee.id,
+              adaptationPeriodStart: adaptationPeriodStart,
+              adaptationPeriodEnd: adaptationPeriodEnd,
+              hrEmployee: props.profile._id,
+              stage: props.plan ? props.plan.stage : stage[0].name,
+              mark: mark,
+              dateCreate: props.plan ? props.plan.dateCreate : date.toLocaleDateString,
+              tasks: []
+            }
+          })
       }
-      )}
+      else
+        props.updateAdaptationPlan({
+            token: token,
+            plan: {
+              fioEmployee: props.fioEmployee.id,
+              position: position,
+              directorEmployee: directorEmployee.id,
+              adaptationPeriodStart: adaptationPeriodStart,
+              adaptationPeriodEnd: adaptationPeriodEnd,
+              stage: props.plan? props.plan.stage : stage[0].name,
+              mark: mark,
+              dateCreate: props.plan? props.plan.dateCreate : date.toLocaleDateString
+            }
+        })
+    }
   }
   
   const updatePosition = (value) => {
