@@ -1,7 +1,6 @@
 import * as DirectorService from '../services/DirectorService';
 
 export const Directors = async (req,res,next) => {
-	console.log('directors')
 	try {
 		var directors = await DirectorService.getDirectors();
 	} catch ({ message }) {
@@ -10,6 +9,5 @@ export const Directors = async (req,res,next) => {
 			message
 		});
 	}
-	console.log('directors', directors)
 	return res.json(directors);
 }

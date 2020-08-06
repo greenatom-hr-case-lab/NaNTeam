@@ -43,9 +43,9 @@ function MainInfo(props) {
   const sendData = () => {
     updatePlan()
     if (props.plan) {
-      if (props.user.role === 'HR-сотрудник' && (props.plan.stage === stage[0].name) ||
-        props.user.role === 'Руководитель' && (props.plan.stage === stage[2].name || props.plan.stage === stage[4].name) ||
-        props.user.role === 'Сотрудник' && (props.plan.stage === stage[1].name || stage[3].name)) {
+      if (props.profile.role === 'HR-сотрудник' && (props.plan.stage === stage[0].name) ||
+        props.profile.role === 'Руководитель' && (props.plan.stage === stage[2].name || props.plan.stage === stage[4].name) ||
+        props.profile.role === 'Сотрудник' && (props.plan.stage === stage[1].name || stage[3].name)) {
         let i = 0
         while (stage[i].completed) {
           i++
@@ -60,63 +60,60 @@ function MainInfo(props) {
   }
   
   useEffect(() => {
-    console.log('TOKEN', props.token)
-    console.log('stages', stage)
-    props.getDirectors({token: token})
-    console.log('props.user-->', props.user)
+    console.log('USEEFFECT')
     let i = 0
     if (props.plan) {
       console.log(props.plan.stage)
       while (stage[i].name !== props.plan.stage) {
         i++
       }
-      setStage(stage.map((stage, index) => {
-        if (index < i) stage[index].completed = true
+      setStage(stage.map(function(stage, index){
+        if (index <= i) stage.completed = true
         return stage
       }))
     }
+    props.getDirectors({token: token})
   }, [])
   
   const [position, setPosition] = useState(props.plan ? props.plan.position : null)
-  const [directiorEmployee, setDirectiorEmployee] = useState(props.plan ? props.plan.directiorEmployee : null)
+  const [directorEmployee, setDirectorEmployee] = useState(props.plan ? props.plan.directorEmployee : null)
   const [adaptationPeriodStart, setAdaptationPeriodStart] = useState(props.plan ? props.plan.adaptationPeriodStart : null)
   const [adaptationPeriodEnd, setAdaptationPeriodEnd] = useState(props.plan ? props.plan.adaptationPeriodEnd : null)
-  const [hrEmployee, setHREmployee] = useState(props.user.name)
+  const [hrEmployee, setHREmployee] = useState(props.plan ? props.plan.hrEmployee.name : props.profile.name)
   const [mark, setMark] = useState(props.plan ? props.plan.mark : null)
   
   const updatePlan = () => {
-    console.log('updateplan')
-    console.log((props.plan ? !props.plan.stage : !props.plan) || props.plan.stage  && mark)
-    console.log(Boolean(position) &&
-    directiorEmployee &&
-    adaptationPeriodStart &&
-    adaptationPeriodEnd &&
-    hrEmployee)
-    console.log(position)
-    console.log(directiorEmployee)
-    console.log(adaptationPeriodStart)
-    console.log(adaptationPeriodEnd)
-    console.log(hrEmployee)
     if (
-      ((props.plan ? !props.plan.stage : !props.plan) || props.plan.stage  && mark) &&
+      ((props.plan ? props.plan.stage : !props.plan) || props.plan.stage  && mark) &&
       position &&
-      directiorEmployee &&
+      directorEmployee &&
       adaptationPeriodStart &&
       adaptationPeriodEnd &&
       hrEmployee
-    ) {console.log('зашел в if'); props.updateAdaptationPlan({token: props.token, plan: {
-        fioEmployee: props.user, position: position, directorEmployee: directiorEmployee._id, adaptationPeriodStart: adaptationPeriodStart, adaptationPeriodEnd: adaptationPeriodEnd, hrEmployee: hrEmployee, mark: mark,
-        dateCreate: props.plan? props.plan.dateCreate : date.toLocaleDateString
-    }})}
-    else alert('все доступные поля должны быть заполнены')
+    ) { alert('зашел в if')
+      props.updateAdaptationPlan(
+      {
+        token: token,
+        plan: {
+          fioEmployee: props.fioEmployee.id,
+          position: position,
+          directorEmployee: directorEmployee.id,
+          adaptationPeriodStart: adaptationPeriodStart,
+          adaptationPeriodEnd: adaptationPeriodEnd,
+          hrEmployee: props.profile._id,
+          stage: props.plan? props.plan.stage : stage[0].name,
+          mark: mark,
+          dateCreate: props.plan? props.plan.dateCreate : date.toLocaleDateString
+        }
+      }
+      )}
   }
   
   const updatePosition = (value) => {
     setPosition(value)
-    
   }
-  const updateDirectiorEmployee = (value) => {
-    setDirectiorEmployee(value)
+  const updateDirectorEmployee = (value) => {
+    setDirectorEmployee(value)
   }
   const updateAdaptationPeriodStart = (value) => {
     setAdaptationPeriodStart(value)
@@ -127,25 +124,28 @@ function MainInfo(props) {
   const updateMark = (value) => {
     setMark(value)
   }
-  
+  const disabled = props.profile.role !== 'HR-Сотрудник'
+  useEffect(() => {
+    updatePlan()
+  }, [position, directorEmployee, adaptationPeriodStart, adaptationPeriodEnd, hrEmployee, mark])
   return (
     <div className="mainInfo">
       <p>Дата создания плана: {props.plan ? props.plan.dateCreate : date.toLocaleDateString()}</p>
-      <TextField title={field[0]} disabled={ props.user.role === 'HR-сотрудник' } update={updatePosition} value={position} />
-      <SelectField title={field[1]} disabled={ props.user.role === 'HR-сотрудник' } options={props.directors} update={updateDirectiorEmployee} value={directiorEmployee} />
-      <CalendarField title={field[2]} disabled={ props.user.role === 'HR-сотрудник' } update={updateAdaptationPeriodStart} value={adaptationPeriodStart}/>
-      <CalendarField title={field[3]} disabled={ props.user.role === 'HR-сотрудник' } update={updateAdaptationPeriodEnd} value={adaptationPeriodEnd}/>
+      <TextField title={field[0]} disabled={ disabled } update={updatePosition} value={position} />
+      <SelectField title={field[1]} disabled={ disabled } options={props.directors ? props.directors : []} update={updateDirectorEmployee} value={directorEmployee ? directorEmployee.name : directorEmployee} />
+      <CalendarField title={field[2]} disabled={ disabled } update={updateAdaptationPeriodStart} value={adaptationPeriodStart}/>
+      <CalendarField title={field[3]} disabled={ disabled } update={updateAdaptationPeriodEnd} value={adaptationPeriodEnd}/>
       <TextField title={field[4]} disabled={ true } value={hrEmployee}/>
-      <SelectField title={field[5]} disabled={ !(props.user.role === 'Руководитель' && props.plan.stage === stage[4].name)} options={rating} update={updateMark} value={mark}/>
+      <SelectField title={field[5]} disabled={ !(props.profile.role === 'Руководитель' && props.plan.stage === stage[4].name)} options={rating} update={updateMark} value={mark}/>
       <div className="buttonsList">
         { stage.map(stage => {
           return <Stage stage={stage} key={stage.id}/>
         }) }
       </div>
       <button className='nextStage' onClick={sendData} /*disabled={
-       !(props.user.role === 'HR-сотрудник' && (props.plan.stage === stage[0].name) ||
-        props.user.role === 'Руководитель' && (props.plan.stage === stage[2].name || props.plan.stage === stage[4].name) ||
-        props.user.role === 'Сотрудник' && (props.plan.stage === stage[1].name || stage[3].name) )
+       !(props.profile.role === 'HR-сотрудник' && (props.plan.stage === stage[0].name) ||
+        props.profile.role === 'Руководитель' && (props.plan.stage === stage[2].name || props.plan.stage === stage[4].name) ||
+        props.profile.role === 'Сотрудник' && (props.plan.stage === stage[1].name || stage[3].name) )
       }*/>Отправить</button>
     </div>
   );
@@ -155,7 +155,7 @@ const mapStateToProps = state => {
   return {
     plan: state.adaptationPlanReducer.plan,
     directors: state.employeesPlanReducer.directors,
-    user: state.authReducer.user
+    profile: state.profileReducer.profile
   }
 }
 const mapDispatchToProps = (dispatch, object) => {

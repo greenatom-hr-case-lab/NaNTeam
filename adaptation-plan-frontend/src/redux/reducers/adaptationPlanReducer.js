@@ -6,7 +6,7 @@ import {
 
 const initialState = {
   plan: '',
-  loading: false,
+  loadingPlan: false,
   error: ''
 }
 
@@ -15,24 +15,23 @@ export const adaptationPlanReducer = (state = initialState, action) => {
   switch(action.type) {
     case FETCH_UPDATE_PLAN_REQUEST:
       console.log("FETCH_UPDATE_PLAN_REQUEST")
-      console.log(state)
       return {
         ...state,
-        loading: true,
+        loadingPlan: true,
       }
     case FETCH_UPDATE_PLAN_SUCCESS:
       console.log("FETCH_UPDATE_PLAN_SUCCESS")
       console.log(state)
       return {
         ...state,
-        loading: false,
+        loadingPlan: false,
         plan: action.payload,
       }
     case FETCH_UPDATE_PLAN_FAILURE:
       console.log("FETCH_UPDATE_PLAN_FAILURE")
       return {
         ...state,
-        loading: false,
+        loadingPlan: false,
         error: action.payload
       }
     default:

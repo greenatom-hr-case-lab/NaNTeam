@@ -5,28 +5,27 @@ import '../AccountStyles/SelectList.css'
 import {getEmployees} from "../../../redux/actions/employeesPlan";
 import {getPlanCurrentEmployee} from "../../../redux/actions/adaptationPlan";
 import {connect} from "react-redux";
+import Loader from "./Loader";
 
 function SelectList(props) {
-  const [token, setToken] = useState(localStorage.getItem('token'))
+  const [token] = useState(localStorage.getItem('token'))
   const startValue = { label: 'Выберите..', value: ''}
-  console.log('selectlist')
-  useEffect(() => {
-    props.getEmployees({token: props.token})
-  }, [])
-/*
-  const groupedOptions = [
-    {id: 1, label: 'Дмитрий Хотин', value: 'Дмитрий Хотин'},
-    {id: 2, label: 'Александр Пушкин', value: 'Александр Пушкин'}
-  ]
-*/
-  
+/*  let startValue
+  if (props.fioEmployee)
+    startValue = {label: props.fioEmployee, value: ''}
+  else
+    startValue = { label: 'Выберите..', value: ''}*/
   const [options, setOptions] = useState(
-    props.employees.map((employee, index) => {
-      return {
-        id: employee._id, label: employee.name, value: index
-      }
-    })
+    {label: 'Загрузка...', value: 'Загрузка...'}
   )
+  useEffect(() => {
+    if (props.employees)
+      setOptions(props.employees.map((employee, index) => {
+        return {
+          id: employee._id, label: employee.name, value: index
+        }
+      }))
+  }, [props.employees])
   
   const customTheme = theme => {
     return {
@@ -39,31 +38,25 @@ function SelectList(props) {
     }
   }
   
-  const onChange = (newValue) => {
-    console.log(newValue)
-    props.updateStage()
+  function onChange(newValue) {
+    props.setfioEmployee(newValue)
     props.planCurrentEmployee({token: token, payload: {_id: newValue.id}})
   }
   
-  if (props.employees)
-    return (
-      <div className='selectList'>
-        {/*  <Select
-          defaultValue={''}
-           options={options}
-          theme={customTheme}
-          onChange={onChange}
-        />*/}
-        <AsyncSelect
-          defaultValue={startValue}
-          defaultOptions={options}
-          onChange={onChange}
-          theme={customTheme}
-        />
-      </div>
-    )
-  else
-    return (<div>Loading...</div>)
+  const onMenuOpen = () => {
+    props.getEmployees({token: token})
+  }
+  return (
+    <div className='selectList'>
+      <AsyncSelect
+        defaultValue={startValue}
+        defaultOptions={options}
+        onMenuOpen={onMenuOpen}
+        onChange={onChange}
+        theme={customTheme}
+      />
+    </div>
+  )
 }
 
 const mapStateToProps = state => {
@@ -71,9 +64,11 @@ const mapStateToProps = state => {
     token: state.authReducer.token,
     employees: state.employeesPlanReducer.employees,
     plan: state.adaptationPlanReducer.plan,
+    loadingEmployees: state.employeesPlanReducer.loading,
+    loadingPlan: state.adaptationPlanReducer.loadingPlan
   }
 }
-const mapDispatchToProps = (dispatch, object) => {
+const mapDispatchToProps = dispatch => {
   return {
     getEmployees: (object) => dispatch(getEmployees(object.token)),
     planCurrentEmployee: (object) => dispatch(getPlanCurrentEmployee(object.payload, object.token))

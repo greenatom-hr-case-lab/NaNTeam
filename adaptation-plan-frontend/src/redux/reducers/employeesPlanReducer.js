@@ -26,25 +26,29 @@ export const employeesPlanReducer = (state = initialState, action) => {
       console.log('FETCH_EMPLOYEES_SUCCESS')
       return {
         ...state,
-        employees: action.payload
+        employees: action.payload,
+        loading: false
       }
     case FETCH_EMPLOYEES_FAILURE:
       console.log('FETCH_EMPLOYEES_FAILURE')
       return {
         ...state,
-        error: action.payload
+        error: action.payload,
+        loading: false
       }
     case FETCH_DIRECTORS_SUCCESS:
       console.log('FETCH_DIRECTORS_SUCCESS')
       return {
         ...state,
-        directors: action.payload
+        directors: action.payload,
+        loading: false
       }
     case FETCH_DIRECTORS_FAILURE:
       console.log('FETCH_DIRECTORS_FAILURE')
       return {
         ...state,
-        error: action.payload
+        error: action.payload,
+        loading: false
       }
     default:
       return state

@@ -14,21 +14,30 @@ import Loader from "../Loader";
 function Plan(props) {
 
   const [token, setToken] = useState(localStorage.getItem('token'))
-  const [stage, setStage] = useState('Подготовка')
+  const [stage, setStage] = useState('')
+  const [fioEmployee, setfioEmployee] = useState('')
   const addTask = () => {
     props.addTask({token: token, payload: {_id: props.plan._id}})
   }
-  const createPlan = () => {
-    setStage('Создание плана')
+  const updateStage = (value) => {
+    setStage(value)
   }
-  const beginPlan = () => {
-    setStage('Начало')
+  
+  const setEmployee = (value) => {
+    setfioEmployee(value)
   }
   
   useEffect(() => {
-/*    props.getDirectors({token: token})
-    props.getEmployees({token: token})*/
-    console.log('props.profile', props.profile)
+    if (props.plan){
+      setStage(props.plan.stage)
+    }
+    else {
+      setStage('Подготовка')
+    }
+  }, [props.plan])
+  
+  useEffect(() => {
+    setStage('')
     if (props.profile.role === 'Сотрудник') {
       props.fetchPlan({token: token})
     }
@@ -36,31 +45,32 @@ function Plan(props) {
   
 //  ------------------------------------------------------------
   if (token){
-/*    console.log('СПИСОК --------------------внутри')
-    console.log('props.plan', props.plan)
-    console.log('props.profile.role', props.profile.role)
-    console.log('props.employees', props.employees)
-    console.log('props.directors', props.directors)*/
-    if (props.loadingPlan)
+    /*if (props.loadingPlan)
       return <Loader/>
-    else {
+    else {*/
       if (props.profile.role === "HR-Сотрудник") {
         return (
           <div className="plan">
             <div className="tasks">
               <div className="select">
-                <SelectList updateStage={beginPlan}/>
-                {props.plan ? ((props.plan.stage === 'Согласование руководителем' || props.plan.stage === 'Выполнение') &&
-                  <button className='addTask' onClick={addTask}/>) : ''}
-                {(stage === 'Начало' && !props.plan) &&
-                <div className="board"><BeginThePlan updateStage={createPlan}/></div>}
+                <SelectList updateStage={updateStage} setfioEmployee={setEmployee}/>
+                {props.plan
+                  ?
+                  ((props.plan.stage === 'Согласование руководителем' || props.plan.stage === 'Выполнение') &&
+                  <button className='addTask' onClick={addTask}/>)
+                  :
+                  ''
+                }
+                {stage === 'Подготовка' &&
+                !props.plan &&
+                <div className="board"><BeginThePlan updateStage={updateStage}/></div>
+                }
               </div>
               {props.plan ? (props.plan.tasks ? props.plan.tasks.forEach((task, index) => {
                 return <Task task={task} key={index} index={index}/>
               }) : null) : ''}
             </div>
-            {(stage === 'Создание плана' && !props.plan) ? (<div className="structurePlan"><MainInfo/></div>) : ''}
-            {(props.plan) ? (<div className="structurePlan"><MainInfo/></div>) : ''}
+            {(stage === 'Начало' || props.plan && fioEmployee) ? (<div className="structurePlan"><MainInfo fioEmployee={fioEmployee}/></div>) : ''}
           </div>
         )
       }
@@ -73,7 +83,6 @@ function Plan(props) {
                 {props.plan.stage === 'Согласование руководителем' && <button className='addTask' onClick={addTask}/>}
                 {(props.plan.stage === 'Начало') && <div>План еще не создан сотрудником кадровой службы!</div>}
               </div>
-          
               {props.plan.tasks ? props.plan.tasks.forEach((task, index) => {
                 return <Task task={task} key={index} index={index}/>
               }) : null}
@@ -102,10 +111,14 @@ function Plan(props) {
               <div className="structurePlan"><MainInfo/></div>}
             </div>
           )
-        else return (<div className="action">План пока не создан</div>)
+        else
+          if (props.loadingPlan)
+            return (<Loader/>)
+          else
+            return (<div className="action">План пока не создан</div>)
       }
     }
-  }
+/*  }*/
   else
     return <Redirect to="/" />
 }
@@ -118,10 +131,10 @@ const mapStateToProps = state => {
     employees: state.employeesPlanReducer.employees,
     directors: state.employeesPlanReducer.directors,
     loadingEmployees: state.employeesPlanReducer.loading,
-    loadingPlan: state.adaptationPlanReducer.loading,
+    loadingPlan: state.adaptationPlanReducer.loadingPlan,
   }
 }
-const mapDispatchToProps = (dispatch, object) => {
+const mapDispatchToProps = dispatch => {
   return {
     addTask: (object) => dispatch(addNewTask(object.payload, object.token)),
     fetchPlan: (object) => dispatch(getPlan(object.token)),

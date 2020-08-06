@@ -1,21 +1,22 @@
 import mongoose, {Schema} from 'mongoose';
 
+const date = new Date()
 const AdaptationPlanSchema = new Schema({
 	fioEmployee: {type: Schema.Types.ObjectId, ref: 'User'},
 	position: { type: String},
-	dateCreate: {type: Date, require: true, default: Date.now },
+	dateCreate: {type: String, require: true, default: date.toLocaleDateString() },
 	directorEmployee: {type: Schema.Types.ObjectId, ref: 'User'},
 	hrEmployee: {type: Schema.Types.ObjectId, ref: 'User'},
 	stage: {type: String},
-	adaptationPeriodStart: { type: Date},
-	adaptationPeriodEnd: { type: Date},
+	adaptationPeriodStart: { type: String},
+	adaptationPeriodEnd: { type: String},
 	mark: { type: String},
 	tasks: [{
 		title: {type: String},
 		bodyTask: {type: String},
-		createdAt: { type: Date, require: true, default: Date.now},
-		taskPeriodStart: { type: Date, default: Date.now},
-		taskPeriodEnd: { type: Date},
+		createdAt: { type: String, require: true, default: date.toLocaleDateString()},
+		taskPeriodStart: { type: String},
+		taskPeriodEnd: { type: String},
 		resultTask: {type: Boolean}
 	}]
 });

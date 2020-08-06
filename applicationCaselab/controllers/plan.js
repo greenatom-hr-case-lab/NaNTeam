@@ -15,9 +15,13 @@ export async function plan( req,res,next) {
 		});	
 	}
     if (user["role"].toLowerCase()==="сотрудник"){
-        Plan.findOne({fioEmployee: user["_id"]},function (err,plan){
+        Plan.findOne({fioEmployee: user["_id"]},async function (err,plan){
 			if (err) return err;
-			console.log(plan)
+			if (plan) {
+        plan.directorEmployee = await User.findOne({_id: plan.directorEmployee}, {name: 1})
+        plan.hrEmployee = await User.findOne({_id: plan.hrEmployee}, {name: 1})
+      }
+      console.log('plan', plan)
 			return res.json(plan);
 		});
     } else if (user["role"].toLowerCase()==="руководитель"){
@@ -82,7 +86,10 @@ export async function updatePlan( req,res,next) {
         return res.json(newPlan);
     } else{
       console.log('else');
-      const plan = await User.find().where("_id", plan._id)
+      plan.directorEmployee = await User.findOne({_id: plan.directorEmployee}, {name: 1})
+      plan.hrEmployee = await User.findOne({_id: plan.hrEmployee}, {name: 1})
+      console.log('plan', plan)
+/*      const plan = await User.find().where("_id", plan._id)*/
       return res.json(plan)
     }
 }

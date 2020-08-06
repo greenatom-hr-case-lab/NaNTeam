@@ -73,7 +73,7 @@ const mapStateToProps = state => {
   }
 }
 
-const mapDispatchToProps = (dispatch, object) => {
+const mapDispatchToProps = dispatch => {
    return {
     fetchData: (object) => dispatch(profileFetchData(object))
    }

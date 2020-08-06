@@ -1,14 +1,23 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Select from 'react-select';
+import AsyncSelect from 'react-select/async';
 import '../AccountStyles/SelectField.css'
 
 function SelectField(props) {
-  const startValue = { label: 'Выберите..', value: ''}
-  console.log(props.options)
+  let startValue
   const [options, setOptions] = useState(props.options.map(function(option, index) {
     return {id: option._id, label: option.name, value: index}
   }))
-  
+  if (props.value)
+    startValue = { label: props.value, value: ''}
+  else
+    startValue = { label: 'Выберите', value: ''}
+  console.log('startValue', startValue)
+  useEffect(() => {
+    setOptions(props.options.map(function(option, index) {
+      return {id: option._id, label: option.name, value: index}
+    }))
+  }, [props.options])
   const customStyles = {
     valueContainer: (provided) => ({
       ...provided,
@@ -65,15 +74,15 @@ function SelectField(props) {
   }
 
     const onChange = (newValue) => {
-    console.log(newValue)
-    props.update(newValue)
+      console.log(newValue)
+      props.update(newValue)
     }
   return (
     <div className="item">
       <span>{props.title.name}</span>
-      <Select /*className="selectField"*/
-        defaultValue={props.value ? props.value : startValue}
-        options={options}
+      <AsyncSelect
+        defaultValue={startValue}
+        defaultOptions={options}
         styles={customStyles}
         onChange={(value) => props.update(value)}
         isDisabled={props.disabled}

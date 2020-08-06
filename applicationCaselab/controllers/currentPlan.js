@@ -1,4 +1,5 @@
 import * as CurrentPlanService from '../services/CurrentPlanService';
+import User from "../models/user";
 
 export async function getCurrentPlan( req,res,next){
 	try {
@@ -9,6 +10,14 @@ export async function getCurrentPlan( req,res,next){
 			message
 		});	
 	}
-	console.log('hi',currentPlan)
-	return res.json(currentPlan);
+	if (currentPlan) {
+		currentPlan.directorEmployee = await User.findOne({_id: currentPlan.directorEmployee}, {name: 1})
+		currentPlan.hrEmployee = await User.findOne({_id: currentPlan.hrEmployee}, {name: 1})
+		console.log('currentPlan',currentPlan)
+		return res.json(currentPlan)
+	}
+	else {
+		console.log('no plan')
+		return res.json(null)
+	}
 }
