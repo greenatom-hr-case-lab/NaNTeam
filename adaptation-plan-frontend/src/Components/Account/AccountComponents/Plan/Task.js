@@ -17,9 +17,9 @@ function Task(props) {
   let taskTitle = createRef()
   let bodyTask = createRef()
   
-  const disabled = !(props.user.role === 'Сотрудник' && (props.plan.stage === 'Заполнение сотрудником' || props.plan.stage === 'Выполнение') ||
-    props.user.role === 'HR-сотрудник' && (props.plan.stage === 'Согласование руководителем' || props.plan.stage === 'Оценка руководителем') ||
-    props.user.role === 'Руководитель' && (props.plan.stage === 'Согласование руководителем' || props.plan.stage === 'Оценка руководителем' || props.plan.stage === 'Заполнение сотрудником' || props.plan.stage === 'Выполнение'))
+  const disabled = !(props.profile.role === 'Сотрудник' && (props.plan.stage === 'Создание плана' || props.plan.stage === 'Согласование руководителем') ||
+    props.profile.role === 'HR-сотрудник' && props.plan.stage === 'Заполнение сотрудником' ||
+    props.profile.role === 'Руководитель' && (props.plan.stage === 'Заполнение сотрудником' || props.plan.stage === 'Выполнение'))
   
   const updatePlan = () => {
     if (
@@ -28,8 +28,8 @@ function Task(props) {
       taskTitle.current.value &&
       bodyTask.current.value
     ) props.updateTask({ token: props.token, task: {
-        index: props.index,
-        _id: props.plan._id,
+        plan_id: props.plan._id,
+        _id: props.task._id,
         resultTask: resultTask.current.checked,
         taskTitle: taskTitle.current.value,
         bodyTask: bodyTask.current.value,
@@ -47,7 +47,7 @@ function Task(props) {
     updatePlan()
   }
   const deleteTask = () => {
-    props.deleteTask({token: props.token, payload: {_id: props.plan._id, index: props.index}})
+    props.deleteTask({token: props.token, payload: {_id: props.plan._id, index: props.task._id}})
   }
   return (
     <div className='task'>
@@ -55,7 +55,9 @@ function Task(props) {
         <input type='checkbox'
                className="checkBox"
                defaultChecked={props.task.resultTask}
-               disabled={disabled}
+               disabled={!(props.profile.role === 'Сотрудник' && props.plan.stage === 'Согласование руководителем' ||
+                 props.profile.role === 'HR-сотрудник' && props.plan.stage === 'Выполнение' ||
+                 props.profile.role === 'Руководитель' && props.plan.stage === 'Выполнение')}
                ref={resultTask}
                onBlur={updatePlan}/>
         <input type='text'
@@ -85,7 +87,7 @@ function Task(props) {
                 disabled={disabled}
                 ref={bodyTask}
                 onBlur={updatePlan}/>
-      <p className="taskDate">Дата создания: {props.plan.position ? props.plan.position : ''}</p>
+      <p className="taskDate">Дата создания: {props.task.createdAt ? props.task.createdAt : ''}</p>
     </div>
   );
 }
@@ -94,7 +96,7 @@ const mapStateToProps = state => {
   return {
     token: state.authReducer.token,
     plan: state.adaptationPlanReducer.plan,
-    user: state.authReducer.user
+    profile: state.profileReducer.profile
   }
 }
 const mapDispatchToProps = (dispatch, object) => {

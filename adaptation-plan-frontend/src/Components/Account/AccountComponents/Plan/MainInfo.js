@@ -41,20 +41,19 @@ function MainInfo(props) {
   ]
   
   const sendData = () => {
-    updatePlan()
+/*    updatePlan()*/
     if (props.plan) {
-      if (props.profile.role === 'HR-сотрудник' && (props.plan.stage === stage[0].name) ||
-        props.profile.role === 'Руководитель' && (props.plan.stage === stage[2].name || props.plan.stage === stage[4].name) ||
-        props.profile.role === 'Сотрудник' && (props.plan.stage === stage[1].name || stage[3].name)) {
+      if (props.profile.role === 'Руководитель' && (props.plan.stage === stage[1].name || props.plan.stage === stage[3].name) ||
+        props.profile.role === 'Сотрудник' && (props.plan.stage === stage[0].name || stage[2].name)) {
         let i = 0
         while (stage[i].completed) {
           i++
         }
-        setStage(stage.map((stage, index) => {
-          if (index === i) stage[index].completed = true
+/*        setStage(stage.map((stage, index) => {
+          if (index === i) stage.completed = true
           return stage
-        }))
-        props.updatePlanStage({token: token, plan: {stage: stage[i + 1].name, _id: props.plan._id}})
+        }))*/
+        props.updatePlanStage({token: token, plan: {stage: stage[i].name, _id: props.plan._id}})
       }
     }
   }
@@ -72,6 +71,7 @@ function MainInfo(props) {
         return stage
       }))
     }
+    console.log(stage)
     props.getDirectors({token: token})
   }, [])
   

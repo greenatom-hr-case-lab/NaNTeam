@@ -59,7 +59,7 @@ function Plan(props) {
                 <SelectList updateStage={updateStage} setfioEmployee={setEmployee}/>
                 {props.plan
                   ?
-                  ((props.plan.stage === 'Согласование руководителем' || props.plan.stage === 'Выполнение') &&
+                  ((props.plan.stage === 'Заполнение сотрудиком') &&
                   <button className='addTask' onClick={addTask}/>)
                   :
                   ''
@@ -84,7 +84,7 @@ function Plan(props) {
             <div className="tasks">
               <div className="select">
                 <SelectList updateStage={updateStage} setfioEmployee={setEmployee}/>
-                {props.plan.stage === 'Согласование руководителем' && <button className='addTask' onClick={addTask}/>}
+                {props.plan.stage === 'Заполнение сотрудником' && <button className='addTask' onClick={addTask}/>}
                 {(props.plan.stage === 'Начало') && <div>План еще не создан сотрудником кадровой службы!</div>}
               </div>
               {props.plan.tasks ? props.plan.tasks.forEach((task, index) => {
@@ -101,16 +101,15 @@ function Plan(props) {
           return (
             <div className="plan">
               <div className="tasksEmployee">
-                {props.plan.tasks ? props.plan.tasks.forEach((task, index) => {
+                {props.plan.tasks ? props.plan.tasks.map((task, index) => {
                   return <Task task={task} key={index} index={index}/>
                 }) : null}
-                {(!props.plan.stage) && <div className="action">План еще не создан сотрудником кадровой службы!</div>}
-                {(props.plan.stage === 'Заполнение сотрудником' || props.plan.stage === 'Выполнение') &&
+                {(props.plan.stage === 'Создание плана' || props.plan.stage === 'Согласование') &&
                 (<div className='addTaskEmployee'>
                   <button className='addTask' onClick={addTask}/>
                 </div>)}
               </div>
-              {(props.plan.stage !== 'Начало' && props.plan.stage !== undefined) &&
+              {(props.plan.stage && !props.loadingPlan) &&
               <div className="structurePlan"><MainInfo/></div>}
             </div>
           )

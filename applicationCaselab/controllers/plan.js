@@ -134,11 +134,17 @@ export async function addTask( req,res,next) {
 }
 
 export async function updateTask( req,res,next) {
-  const plan = await Plan.findOne({_id: req.body._id})
-  delete req.body._id
-  console.log(req.body._id)
+  const plan = await Plan.findOne({_id: req.body.plan_id})
   console.log(req.body)
-  plan.tasks[req.body.index] = req.body
+  plan.tasks.forEach( (task) => {
+    if (task._id == req.body._id ) {
+      task.resultTask = req.body.resultTask
+      task.taskPeriodStart = req.body.taskPeriodStart
+      task.taskPeriodEnd = req.body.taskPeriodEnd
+      task.bodyTask = req.body.bodyTask
+      task.title = req.body.taskTitle
+    }
+  })
   await plan.save()
   console.log(plan)
   return res.json(plan)
@@ -146,23 +152,26 @@ export async function updateTask( req,res,next) {
 
 export async function deleteTask( req,res,next) {
   const plan = await Plan.findOne({_id: req.body._id})
-  console.log(typeof req.body.index )
+/*  console.log('plan', plan)
   const deleteTasks = plan.tasks
-  let tasks = deleteTasks.filter((task, index) => index != req.body.index);
-  console.log(tasks)
+  console.log('deleteTasks', deleteTasks)
+  console.log('req.body.index', req.body.index)*/
+  plan.tasks = plan.tasks.filter((task) => task._id != req.body.index);
+/*  console.log(tasks)
   if (!tasks[0])
     plan.tasks = []
   else
-    plan.tasks = tasks
+    plan.tasks = tasks*/
   await plan.save()
-  console.log(plan)
-  return res.json(plan)
+  const newPlan = await Plan.findOne({_id: req.body._id})
+  console.log(newPlan)
+  return res.json(newPlan);
 }
 
 export async function updateStage( req,res,next) {
   console.log('hi')
   await Plan.findOneAndUpdate({_id: req.body._id},{stage: req.body.stage});
-  const newPlan = await Plan.find().where("_id", req.body._id)
+  const newPlan = await Plan.findOne( {_id: req.body._id} )
   console.log(newPlan)
   return res.json(newPlan);
 }
