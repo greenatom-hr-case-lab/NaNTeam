@@ -22,7 +22,6 @@ export default async (req,res,next) => {
 	}
 	
 	req.token = tokenObj;//отправка токена в клиент
-	console.log(tokenObj);
 	next();
 
 }

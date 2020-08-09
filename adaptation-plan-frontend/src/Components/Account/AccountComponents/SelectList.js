@@ -43,15 +43,11 @@ function SelectList(props) {
     props.planCurrentEmployee({token: token, payload: {_id: newValue.id}})
   }
   
-  const onMenuOpen = () => {
-    props.getEmployees({token: token})
-  }
   return (
     <div className='selectList'>
       <AsyncSelect
         defaultValue={startValue}
         defaultOptions={options}
-        onMenuOpen={onMenuOpen}
         onChange={onChange}
         theme={customTheme}
       />

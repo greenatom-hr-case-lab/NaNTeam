@@ -19,7 +19,5 @@ export async function getUserInfo(token) {// получение пользова
 	catch (e) {
 		throw e;
 	}
-	
-	console.log('user', user)
 	return user;
 }

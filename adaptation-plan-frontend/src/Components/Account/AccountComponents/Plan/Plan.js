@@ -38,6 +38,8 @@ function Plan(props) {
   }, [props.plan])
   
   useEffect(() => {
+    if (props.profile.role !== 'Сотрудник')
+      props.getEmployees({token: token})
     setStage('')
     if (props.profile.role === 'Сотрудник') {
       props.fetchPlan({token: token})
@@ -72,7 +74,7 @@ function Plan(props) {
               }) : null) : ''}
             </div>
             {stage === 'Начало' && !props.plan && <div className="structurePlan"><MainInfo fioEmployee={fioEmployee}/></div>}
-            {props.plan && fioEmployee && <div className="structurePlan"><MainInfo fioEmployee={fioEmployee}/></div>}
+            {props.plan && !props.loadingPlan && fioEmployee && <div className="structurePlan"><MainInfo fioEmployee={fioEmployee}/></div>}
           </div>
         )
       }
@@ -81,7 +83,7 @@ function Plan(props) {
           <div className="plan">
             <div className="tasks">
               <div className="select">
-                <SelectList/>
+                <SelectList updateStage={updateStage} setfioEmployee={setEmployee}/>
                 {props.plan.stage === 'Согласование руководителем' && <button className='addTask' onClick={addTask}/>}
                 {(props.plan.stage === 'Начало') && <div>План еще не создан сотрудником кадровой службы!</div>}
               </div>
@@ -89,13 +91,12 @@ function Plan(props) {
                 return <Task task={task} key={index} index={index}/>
               }) : null}
             </div>
-            {(props.plan.stage !== 'Начало' && props.plan.stage !== undefined) &&
-            <div className="structurePlan"><MainInfo/></div>}
+            {props.plan && !props.loadingPlan &&
+            <div className="structurePlan"><MainInfo fioEmployee={fioEmployee}/></div>}
           </div>
         )
       }
       if (props.profile.role === 'Сотрудник') {
-        console.log('внутри сотрудника')
         if (props.plan)
           return (
             <div className="plan">
