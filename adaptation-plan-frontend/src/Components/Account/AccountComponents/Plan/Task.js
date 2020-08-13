@@ -1,4 +1,4 @@
-import React, {createRef, useState} from 'react';
+import React, {createRef, useEffect, useState} from 'react';
 import './Task.css'
 import CalendarField from "../CalendarField";
 import {updatePlanTask, deleteTask} from '../../../../redux/actions/adaptationPlan'
@@ -18,7 +18,7 @@ function Task(props) {
   let bodyTask = createRef()
   
   const disabled = !(props.profile.role === 'Сотрудник' && (props.plan.stage === 'Создание плана' || props.plan.stage === 'Согласование руководителем') ||
-    props.profile.role === 'HR-сотрудник' && props.plan.stage === 'Заполнение сотрудником' ||
+    props.profile.role === 'HR-Сотрудник' && props.plan.stage !== 'Оценка завершена' ||
     props.profile.role === 'Руководитель' && (props.plan.stage === 'Заполнение сотрудником' || props.plan.stage === 'Выполнение'))
   
   const updatePlan = () => {
@@ -47,6 +47,7 @@ function Task(props) {
     updatePlan()
   }
   const deleteTask = () => {
+    console.log('////////////////////////////', {token: props.token, payload: {_id: props.plan._id, index: props.task._id}})
     props.deleteTask({token: props.token, payload: {_id: props.plan._id, index: props.task._id}})
   }
   return (
@@ -56,9 +57,10 @@ function Task(props) {
                className="checkBox"
                defaultChecked={props.task.resultTask}
                disabled={!(props.profile.role === 'Сотрудник' && props.plan.stage === 'Согласование руководителем' ||
-                 props.profile.role === 'HR-сотрудник' && props.plan.stage === 'Выполнение' ||
+                 props.profile.role === 'HR-Сотрудник' && props.plan.stage !== 'Оценка завершена' ||
                  props.profile.role === 'Руководитель' && props.plan.stage === 'Выполнение')}
                ref={resultTask}
+               onChange = {updatePlan}
                onBlur={updatePlan}/>
         <input type='text'
                className="taskSubTitle"

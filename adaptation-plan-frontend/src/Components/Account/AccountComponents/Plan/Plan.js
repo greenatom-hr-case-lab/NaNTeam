@@ -57,21 +57,15 @@ function Plan(props) {
             <div className="tasks">
               <div className="select">
                 <SelectList updateStage={updateStage} setfioEmployee={setEmployee}/>
-                {props.plan
-                  ?
-                  ((props.plan.stage === 'Заполнение сотрудиком') &&
-                  <button className='addTask' onClick={addTask}/>)
-                  :
-                  ''
-                }
+                {props.plan && props.plan.stage !== 'Создание плана' && props.plan.stage !== 'Оценка руководителем' && props.plan.stage !== 'Оценка завершена' && <button className='addTask' onClick={addTask}/>}
                 {stage === 'Подготовка' &&
                 !props.plan &&
                 <div className="board"><BeginThePlan updateStage={updateStage}/></div>
                 }
               </div>
-              {props.plan ? (props.plan.tasks ? props.plan.tasks.forEach((task, index) => {
+              {props.plan.tasks && !props.loadingPlan ? props.plan.tasks.map((task, index) => {
                 return <Task task={task} key={index} index={index}/>
-              }) : null) : ''}
+              }) : null}
             </div>
             {stage === 'Начало' && !props.plan && <div className="structurePlan"><MainInfo fioEmployee={fioEmployee}/></div>}
             {props.plan && !props.loadingPlan && fioEmployee && <div className="structurePlan"><MainInfo fioEmployee={fioEmployee}/></div>}
@@ -87,7 +81,7 @@ function Plan(props) {
                 {props.plan.stage === 'Заполнение сотрудником' && <button className='addTask' onClick={addTask}/>}
                 {(props.plan.stage === 'Начало') && <div>План еще не создан сотрудником кадровой службы!</div>}
               </div>
-              {props.plan.tasks ? props.plan.tasks.forEach((task, index) => {
+              {props.plan.tasks && !props.loadingPlan ? props.plan.tasks.map((task, index) => {
                 return <Task task={task} key={index} index={index}/>
               }) : null}
             </div>
@@ -101,10 +95,10 @@ function Plan(props) {
           return (
             <div className="plan">
               <div className="tasksEmployee">
-                {props.plan.tasks ? props.plan.tasks.map((task, index) => {
+                {props.plan.tasks && !props.loadingPlan ? props.plan.tasks.map((task, index) => {
                   return <Task task={task} key={index} index={index}/>
                 }) : null}
-                {(props.plan.stage === 'Создание плана' || props.plan.stage === 'Согласование') &&
+                {props.plan.stage === 'Создание плана' &&
                 (<div className='addTaskEmployee'>
                   <button className='addTask' onClick={addTask}/>
                 </div>)}

@@ -20,7 +20,8 @@ function MainInfo(props) {
     {id: 3, name: 'Начало'},
     {id: 4, name: 'Конец'},
     {id: 5, name: 'HR-сотрудник'},
-    {id: 6, name: 'Оценка'}
+    {id: 6, name: 'Оценка'},
+    {id: 7, name: 'Результат'}
   ])
   
   const [stage, setStage] = useState([
@@ -44,6 +45,7 @@ function MainInfo(props) {
 /*    updatePlan()*/
     if (props.plan) {
       if (props.profile.role === 'Руководитель' && (props.plan.stage === stage[1].name || props.plan.stage === stage[3].name) ||
+        props.profile.role === 'HR-Сотрудник' ||
         props.profile.role === 'Сотрудник' && (props.plan.stage === stage[0].name || stage[2].name)) {
         let i = 0
         while (stage[i].completed) {
@@ -128,7 +130,7 @@ function MainInfo(props) {
             directorEmployee: directorEmployee.id,
             adaptationPeriodStart: adaptationPeriodStart,
             adaptationPeriodEnd: adaptationPeriodEnd,
-            mark: mark,
+            mark: mark.label,
           }
         })
     }
@@ -154,7 +156,7 @@ function MainInfo(props) {
     setClick(true)
     setMark(value)
   }
-  const disabled = props.profile.role !== 'HR-Сотрудник'
+  const disabled = !(props.profile.role === 'HR-Сотрудник' && props.plan.stage !== stage[5].name)
   
   useEffect(() => {
     updatePlan()
@@ -168,18 +170,20 @@ function MainInfo(props) {
       <CalendarField title={field[2]} disabled={ disabled } update={updateAdaptationPeriodStart} value={adaptationPeriodStart}/>
       <CalendarField title={field[3]} disabled={ disabled } update={updateAdaptationPeriodEnd} value={adaptationPeriodEnd}/>
       <TextField title={field[4]} disabled={ true } value={hrEmployee}/>
-      {props.plan ? <SelectField title={field[5]} disabled={ !(props.profile.role === 'Руководитель' && props.plan.stage === stage[4].name)} options={rating} update={updateMark} value={mark}/> && props.plan.stage === stage[4].name : ''}
+      {props.plan && (props.plan.stage === stage[3].name || props.plan.stage === stage[4].name || props.plan.stage === stage[5].name) && <SelectField title={field[5]} disabled={ !(props.profile.role === 'Руководитель' && props.plan.stage === stage[3].name || props.profile.role === 'HR-Сотрудник' && props.plan.stage === stage[4].name) } options={rating} update={updateMark} value={mark}/>}
+      {props.plan && (props.plan.stage === stage[4].name || props.plan.stage === stage[5].name) && <TextField title={field[6]} disabled={true} value={(props.plan.mark === rating[3].name || props.plan.mark === rating[4].name) ? 'Программа не пройдена' : 'Программа пройдена'}/>}
       <div className="buttonsList">
         { stage.map(stage => {
           return <Stage stage={stage} key={stage.id}/>
         }) }
       </div>
       <div>
-        {props.profile.role !== 'HR-Сотрудник' && <button
+        {(props.profile.role !== 'HR-Сотрудник' || props.profile.role === 'HR-Сотрудник' && props.plan.stage === stage[4].name) && <button
           className='nextStage'
           onClick={sendData}
           disabled={
          !(props.profile.role === 'Руководитель' && (props.plan.stage === stage[1].name || props.plan.stage === stage[3].name) ||
+           props.profile.role === 'HR-Сотрудник' ||
           props.profile.role === 'Сотрудник' && (props.plan.stage === stage[0].name || props.plan.stage === stage[2].name))
         }
         >
