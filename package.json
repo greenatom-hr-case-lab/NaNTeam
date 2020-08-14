@@ -9,10 +9,10 @@
   },
   "main": "applicationCaselab/server.js",
   "scripts": {
-    "client": "cd ../adaptation-plan-frontend && npm start",
-    "build": "cd ../adaptation-plan-frontend && npm run build",
-    "install-all": "cd adaptation-plan-frontend && npm install && cd ../applicationCaselab && npm install",
-    "heroku-postbuild": "npm run install-all && npm run build",
+    "client": "cd adaptation-plan-frontend && npm start",
+    "build": "cd adaptation-plan-frontend && npm run build",
+    "install-client": "cd adaptation-plan-frontend && npm install",
+    "heroku-postbuild": "npm run install-client && npm run build",
     "start": "cd applicationCaselab && nodemon --exec babel-node server.js",
     "dev": "concurrently \" npm run start\" \"npm run client\""
   }

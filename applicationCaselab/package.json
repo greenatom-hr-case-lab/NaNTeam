@@ -16,9 +16,7 @@
     "mongoose": "^5.9.27",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.4",
-    "promised": "^0.2.2"
-  },
-  "devDependencies": {
+    "promised": "^0.2.2",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-preset-es2015": "^6.24.1",
@@ -26,5 +24,8 @@
     "babel-preset-stage-1": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "babel-preset-stage-3": "^6.24.1"
+  },
+  "devDependencies": {
+
   }
 }
