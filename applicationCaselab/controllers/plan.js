@@ -13,77 +13,31 @@ export async function plan( req,res,next) {
 		});	
 	}
     if (user["role"].toLowerCase()==="сотрудник"){
-        Plan.findOne({fioEmployee: user["_id"]},async function (err,plan){
+      Plan.findOne({fioEmployee: user["_id"]},async function (err,plan){
 			if (err) return err;
 			if (plan) {
         plan.directorEmployee = await User.findOne({_id: plan.directorEmployee}, {name: 1})
         plan.hrEmployee = await User.findOne({_id: plan.hrEmployee}, {name: 1})
+        console.log('plan', plan)
+        return res.json(plan);
       }
-      console.log('plan', plan)
-			return res.json(plan);
+			else
+			  return res.json('');
 		});
     } else if (user["role"].toLowerCase()==="руководитель"){
       console.log('руководитель')
-        //не готово
-      /*var array = await User.find().where("role", "Руководитель")*/
-        /*User.find({},'name').lean().exec(function (err, docs) {
-            var array = []
-            docs.forEach(function(item){
-                var doc = JSON.stringify(item);
-                var docc = JSON.parse(doc);
-                docc.Name = docc.Name.FirstName + " " + docc.Name.SecondName;
-                array.push(docc);
-            })
-            return res.json(array);*/
-      /*Plan.find({directorEmployee: user["_id"]},function (err,plans){
-        if (err) return err;
-        var array = plans.map(async function(plan, index) {
-          console.log(plan)
-          let user =  await User.findOne({_id: plan.fioEmployee}, {name: 1}, function (err,user){
-            console.log('user', user)
-            return user
-          })
-          console.log(user)
-          return user
-        })
-      });
-      console.log(array)
-      return res.json(array);*/
       let array = []
       let employees = []
-      /*await Plan.find({directorEmployee: user["_id"]}, function (err,plans){
-        plans.forEach(async (plan) => {
-          console.log('plan', plan)
-          /!*await User.find({_id: plan.fioEmployee},'name').lean().exec(function (err, user) {
-            console.log(user)
-              array.push(user[0])
-            })*!/
-          let user = await User.find({_id: plan.fioEmployee},'name')
-          console.log('user', user)
-        })
-      })*/
       const plans = await Plan.find({directorEmployee: user._id})
       console.log('plans', plans)
-      /*await plans.forEach(async (plan) => {
-        await console.log('here')
-       await User.findOne({_id: plan.fioEmployee}, 'name', async function (err,user){
-          await console.log('user', user)
-       })
-        await console.log('now here')
-      })*/
       plans.forEach( (plan) => {
         employees.push(plan.fioEmployee)
       })
       console.log('employees', employees)
-      /*employees.forEach( async function(employee) {
-        const user = await User.findOne({_id: employee}, 'name')
-        console.log('user', user)
-        await array.push(user)
-      })*/
       for (const employee of employees) {
         array.push(await User.findOne({_id: employee}, 'name'))
       }
-        console.log('array', array)
+      console.log('array', array)
       return res.json(array)
     } else if(user["role"].toLowerCase()==="hr-сотрудник"){
       User.find({role: 'Сотрудник'}, "name", function (err,users){
@@ -129,6 +83,8 @@ export async function addTask( req,res,next) {
   const plan = await Plan.findOne({_id: req.body._id});
   plan.tasks.push({});
   plan.save();
+  plan.directorEmployee = await User.findOne({_id: plan.directorEmployee}, {name: 1})
+  plan.hrEmployee = await User.findOne({_id: plan.hrEmployee}, {name: 1})
   console.log(plan)
   return res.json(plan);
 }
@@ -146,12 +102,16 @@ export async function updateTask( req,res,next) {
     }
   })
   await plan.save()
+  plan.directorEmployee = await User.findOne({_id: plan.directorEmployee}, {name: 1})
+  plan.hrEmployee = await User.findOne({_id: plan.hrEmployee}, {name: 1})
   console.log(plan)
   return res.json(plan)
 }
 
 export async function deleteTask( req,res,next) {
+  console.log('deleteTask')
   const plan = await Plan.findOne({_id: req.body._id})
+  console.log('req.body', req.body)
 /*  console.log('plan', plan)
   const deleteTasks = plan.tasks
   console.log('deleteTasks', deleteTasks)
@@ -164,6 +124,8 @@ export async function deleteTask( req,res,next) {
     plan.tasks = tasks*/
   await plan.save()
   const newPlan = await Plan.findOne({_id: req.body._id})
+  newPlan.directorEmployee = await User.findOne({_id: newPlan.directorEmployee}, {name: 1})
+  newPlan.hrEmployee = await User.findOne({_id: newPlan.hrEmployee}, {name: 1})
   console.log(newPlan)
   return res.json(newPlan);
 }
@@ -172,6 +134,8 @@ export async function updateStage( req,res,next) {
   console.log('hi')
   await Plan.findOneAndUpdate({_id: req.body._id},{stage: req.body.stage});
   const newPlan = await Plan.findOne( {_id: req.body._id} )
+  newPlan.directorEmployee = await User.findOne({_id: newPlan.directorEmployee}, {name: 1})
+  newPlan.hrEmployee = await User.findOne({_id: newPlan.hrEmployee}, {name: 1})
   console.log(newPlan)
   return res.json(newPlan);
 }

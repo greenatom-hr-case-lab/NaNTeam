@@ -18,14 +18,20 @@ import directorRoute from './routes/director';
 import currentPlan from './routes/currentPlan';
 
 const app = express();
-
+const MONGODB_URI = 'mongodb+srv://dmitriykhotin:KM2d3d37g@adaptation-plan.mplfs.mongodb.net/Adaptation-plan?retryWrites=true&w=majority'
 mongoose.Promise = bluebird;
-mongoose.connect("mongodb://localhost/user-db",{ useNewUrlParser: true, useUnifiedTopology: true,useFindAndModify: false });
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/user-db",{ useNewUrlParser: true, useUnifiedTopology: true,useFindAndModify: false })
+	.then(() => console.log("Database Connected Successfully"))
+	.catch(err => console.log('error', err));
+
+if (process.env.NODE_ENV === 'production') {
+	app.use(express.static('adaptation-plan-frontend/build'))
+}
 
 app.listen(config.port, err => {
 	if (err) throw err;
 	
-	console.log('Server listening on port $(config.port)');
+	console.log(`Server listening on port ${config.port}`);
 });
 
 app.use(morgan('tiny'));
