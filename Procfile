@@ -1,1 +1,1 @@
-web:node applicationCaselab/server.js
+web: npm run start
