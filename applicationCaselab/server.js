@@ -28,10 +28,12 @@ if (process.env.NODE_ENV === 'production') {
 	app.use(express.static('adaptation-plan-frontend/build'))
 }
 
-app.listen(config.port, err => {
+let PORT = process.env.PORT || config.port
+
+app.listen(PORT, err => {
 	if (err) throw err;
 	
-	console.log(`Server listening on port ${config.port}`);
+	console.log(`Server listening on port ${PORT}`);
 });
 
 app.use(morgan('tiny'));
