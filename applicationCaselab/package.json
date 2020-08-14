@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "client": "cd ../adaptation-plan-frontend && npm start",
-    "build": "cd adaptation-plan-frontend && npm run build",
+    "build": "cd ../adaptation-plan-frontend && npm run build",
+    "install-client": "cd ../adaptation-plan-frontend && npm install",
+    "heroku-postbuild": "npm run install-client && npm run build",
     "start": "nodemon --exec babel-node server.js",
     "dev": "concurrently \"nodemon --exec babel-node server.js\" \"npm run client\""
   },
