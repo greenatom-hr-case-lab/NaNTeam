@@ -4,6 +4,10 @@
   "dependencies": {
     "concurrently": "^5.3.0"
   },
+  "engines": {
+    "node": "14.4"
+  },
+  "main": "applicationCaselab/server.js",
   "scripts": {
     "client": "cd ../adaptation-plan-frontend && npm start",
     "build": "cd ../adaptation-plan-frontend && npm run build",
