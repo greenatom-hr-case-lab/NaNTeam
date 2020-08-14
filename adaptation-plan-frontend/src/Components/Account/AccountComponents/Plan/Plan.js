@@ -25,6 +25,7 @@ function Plan(props) {
   
   const setEmployee = (value) => {
     setfioEmployee(value)
+    if (!props.plan) setStage('Подготовка')
   }
   
   useEffect(() => {
@@ -32,15 +33,16 @@ function Plan(props) {
     if (props.plan){
       setStage(props.plan.stage)
     }
-    else {
+    else
       setStage('Подготовка')
-    }
   }, [props.plan])
   
   useEffect(() => {
+    document.title = "План адаптации"
     if (props.profile.role !== 'Сотрудник')
       props.getEmployees({token: token})
     setStage('')
+    setfioEmployee('')
     if (props.profile.role === 'Сотрудник') {
       props.fetchPlan({token: token})
     }
@@ -56,18 +58,20 @@ function Plan(props) {
           <div className="plan">
             <div className="tasks">
               <div className="select">
-                <SelectList updateStage={updateStage} setfioEmployee={setEmployee}/>
-                {props.plan && props.plan.stage !== 'Создание плана' && props.plan.stage !== 'Оценка руководителем' && props.plan.stage !== 'Оценка завершена' && <button className='addTask' onClick={addTask}/>}
-                {stage === 'Подготовка' &&
-                !props.plan &&
-                <div className="board"><BeginThePlan updateStage={updateStage}/></div>
+                <SelectList setfioEmployee={setEmployee}/>
+                {props.plan && fioEmployee &&props.plan.stage !== 'Создание плана' && props.plan.stage !== 'Оценка руководителем' && props.plan.stage !== 'Оценка завершена' && <button className='addTask' onClick={addTask}/>}
+                {stage === 'Подготовка' && !props.plan && !props.loadingPlan
+                  ?
+                  <div className="board"><BeginThePlan updateStage={updateStage}/></div>
+                :
+                  fioEmployee && props.loadingPlan && <Loader/>
                 }
               </div>
-              {props.plan.tasks && !props.loadingPlan ? props.plan.tasks.map((task, index) => {
+              {props.plan && props.plan.tasks && fioEmployee && !props.loadingPlan ? props.plan.tasks.map((task, index) => {
                 return <Task task={task} key={index} index={index}/>
               }) : null}
             </div>
-            {stage === 'Начало' && !props.plan && <div className="structurePlan"><MainInfo fioEmployee={fioEmployee}/></div>}
+            {stage === 'Начало' && !props.plan && !props.loadingPlan && fioEmployee && <div className="structurePlan"><MainInfo fioEmployee={fioEmployee}/></div>}
             {props.plan && !props.loadingPlan && fioEmployee && <div className="structurePlan"><MainInfo fioEmployee={fioEmployee}/></div>}
           </div>
         )
@@ -78,15 +82,14 @@ function Plan(props) {
             <div className="tasks">
               <div className="select">
                 <SelectList updateStage={updateStage} setfioEmployee={setEmployee}/>
-                {props.plan.stage === 'Заполнение сотрудником' && <button className='addTask' onClick={addTask}/>}
-                {(props.plan.stage === 'Начало') && <div>План еще не создан сотрудником кадровой службы!</div>}
+                {props.plan && fioEmployee ? props.plan.stage === 'Заполнение сотрудником' && <button className='addTask' onClick={addTask}/> : props.loadingPlan && <Loader/>}
               </div>
-              {props.plan.tasks && !props.loadingPlan ? props.plan.tasks.map((task, index) => {
+              {props.plan.tasks && fioEmployee && !props.loadingPlan ? props.plan.tasks.map((task, index) => {
                 return <Task task={task} key={index} index={index}/>
-              }) : null}
+              }) :  props.loadingPlan && <Loader/>}
             </div>
-            {props.plan && !props.loadingPlan &&
-            <div className="structurePlan"><MainInfo fioEmployee={fioEmployee}/></div>}
+            {props.plan && fioEmployee && !props.loadingPlan ?
+            <div className="structurePlan"><MainInfo fioEmployee={fioEmployee}/></div> : props.loadingPlan && <Loader/>}
           </div>
         )
       }
@@ -98,10 +101,14 @@ function Plan(props) {
                 {props.plan.tasks && !props.loadingPlan ? props.plan.tasks.map((task, index) => {
                   return <Task task={task} key={index} index={index}/>
                 }) : null}
-                {props.plan.stage === 'Создание плана' &&
+                {props.plan.stage === 'Создание плана' && !props.loadingPlan
+                  ?
                 (<div className='addTaskEmployee'>
                   <button className='addTask' onClick={addTask}/>
-                </div>)}
+                </div>)
+                :
+                  props.loadingPlan && <Loader/>
+                }
               </div>
               {(props.plan.stage && !props.loadingPlan) &&
               <div className="structurePlan"><MainInfo/></div>}

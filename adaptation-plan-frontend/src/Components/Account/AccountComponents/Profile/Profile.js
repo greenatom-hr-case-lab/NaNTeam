@@ -14,6 +14,7 @@ import TitleItem from "../TitleItem";
 function Profile(props) {
   const [token, setToken] = useState(localStorage.getItem('token'))
   useEffect(() => {
+    document.title = 'Личный кабинет'
     props.fetchData({token: token})
   }, [])
   

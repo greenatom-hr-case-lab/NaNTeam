@@ -92,8 +92,7 @@ function MainInfo(props) {
       adaptationPeriodStart &&
       adaptationPeriodEnd &&
       hrEmployee
-    ) { alert('updatePlanTrue')
-      if (!props.plan)
+    ) {if (!props.plan)
         props.updateAdaptationPlan(
           {
             token: token,
@@ -156,7 +155,7 @@ function MainInfo(props) {
     setClick(true)
     setMark(value)
   }
-  const disabled = !(props.profile.role === 'HR-Сотрудник' && props.plan.stage !== stage[5].name)
+  const disabled = props.plan && !(props.profile.role === 'HR-Сотрудник' && props.plan.stage !== stage[5].name)
   
   useEffect(() => {
     updatePlan()
@@ -178,7 +177,7 @@ function MainInfo(props) {
         }) }
       </div>
       <div>
-        {(props.profile.role !== 'HR-Сотрудник' || props.profile.role === 'HR-Сотрудник' && props.plan.stage === stage[4].name) && <button
+        {props.plan && (props.profile.role !== 'HR-Сотрудник' || props.profile.role === 'HR-Сотрудник' && props.plan.stage === stage[4].name) && <button
           className='nextStage'
           onClick={sendData}
           disabled={

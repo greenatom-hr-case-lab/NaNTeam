@@ -12,13 +12,14 @@ function Task(props) {
   
   const [taskPeriodStart, setTaskPeriodStart] = useState(props.task.taskPeriodStart ? props.task.taskPeriodStart : '')
   const [taskPeriodEnd, setTaskPeriodEnd] = useState(props.task.taskPeriodEnd ? props.task.taskPeriodEnd : '')
+  const [click, setClick] = useState(false)
 
   let resultTask = createRef()
   let taskTitle = createRef()
   let bodyTask = createRef()
   
   const disabled = !(props.profile.role === 'Сотрудник' && (props.plan.stage === 'Создание плана' || props.plan.stage === 'Согласование руководителем') ||
-    props.profile.role === 'HR-Сотрудник' && props.plan.stage !== 'Оценка завершена' ||
+    props.profile.role === 'HR-Сотрудник' && props.plan.stage !== 'Оценка завершена' && props.plan.stage !== 'Создание плана' ||
     props.profile.role === 'Руководитель' && (props.plan.stage === 'Заполнение сотрудником' || props.plan.stage === 'Выполнение'))
   
   const updatePlan = () => {
@@ -40,14 +41,18 @@ function Task(props) {
   
   const updateTaskPeriodStart = (value) => {
     setTaskPeriodStart(value)
-    updatePlan()
+    setClick(true)
   }
   const updateTaskPeriodEnd = (value) => {
     setTaskPeriodEnd(value)
-    updatePlan()
+    setClick(true)
   }
+  
+  useEffect( () => {
+    if (click)
+      updatePlan()
+  },[taskPeriodStart, taskPeriodEnd])
   const deleteTask = () => {
-    console.log('////////////////////////////', {token: props.token, payload: {_id: props.plan._id, index: props.task._id}})
     props.deleteTask({token: props.token, payload: {_id: props.plan._id, index: props.task._id}})
   }
   return (
@@ -57,7 +62,7 @@ function Task(props) {
                className="checkBox"
                defaultChecked={props.task.resultTask}
                disabled={!(props.profile.role === 'Сотрудник' && props.plan.stage === 'Согласование руководителем' ||
-                 props.profile.role === 'HR-Сотрудник' && props.plan.stage !== 'Оценка завершена' ||
+                 props.profile.role === 'HR-Сотрудник' && props.plan.stage !== 'Оценка завершена' &&  props.plan.stage !== 'Заполнение сотрудником' ||
                  props.profile.role === 'Руководитель' && props.plan.stage === 'Выполнение')}
                ref={resultTask}
                onChange = {updatePlan}

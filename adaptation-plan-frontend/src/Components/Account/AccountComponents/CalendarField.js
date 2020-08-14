@@ -1,11 +1,10 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Calendar from "react-calendar";
 import '../AccountStyles/CalendarField.css'
-import Datepicker from "react-datepicker"
+
 function CalendarField(props) {
   
   const change = date => {
-    hideCalendar()
     props.update(date.toLocaleDateString())
   }
   
@@ -15,10 +14,9 @@ function CalendarField(props) {
     setCalendarShow(true)
   }
   
-  function hideCalendar() {
-    console.log('hidecalendar')
-    setTimeout(() => setCalendarShow(false), 100)
-  }
+  useEffect( () => {
+    setCalendarShow(false)
+  }, [props.value])
   
   return (
       <div className="item">
