@@ -18,7 +18,7 @@ import directorRoute from './routes/director';
 import currentPlan from './routes/currentPlan';
 
 const app = express();
-const MONGODB_URI = 'mongodb+srv://dmitriykhotin:KM2d3d37g@adaptation-plan.mplfs.mongodb.net/Adaptation-plan?retryWrites=true&w=majority'
+/*const MONGODB_URI = mongodb+srv://dmitriykhotin:KM2d3d37g@adaptation-plan.mplfs.mongodb.net/Adaptation-plan?retryWrites=true&w=majority*/
 mongoose.Promise = bluebird;
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/user-db",{ useNewUrlParser: true, useUnifiedTopology: true,useFindAndModify: false })
 	.then(() => console.log("Database Connected Successfully"))
